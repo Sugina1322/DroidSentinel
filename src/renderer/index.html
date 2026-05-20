@@ -1,0 +1,270 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DroidSentinel</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body class="landing-active">
+    <section id="landingPage" class="landing-page">
+      <div class="landing-main">
+        <p class="eyebrow">Android security hardening console</p>
+        <h1>DroidSentinel</h1>
+        <p>
+          Audit Android privacy exposure, identify telemetry and sensitive app access,
+          apply reversible hardening actions, and maintain a restore trail through ADB.
+        </p>
+        <div class="landing-actions">
+          <button id="enterAppButton" class="primary">Enter app</button>
+          <button id="landingScanButton" class="secondary-button">Scan device</button>
+        </div>
+      </div>
+
+      <div class="landing-guide">
+        <h2>Device Trust Setup</h2>
+        <div class="landing-steps">
+          <article>
+            <span class="step-number">1</span>
+            <strong>Enable Developer Options</strong>
+            <p>Open Android Settings, go to About phone, then tap Build number seven times to unlock developer controls.</p>
+          </article>
+          <article>
+            <span class="step-number">2</span>
+            <strong>Turn On USB Debugging</strong>
+            <p>Enable USB debugging so DroidSentinel can perform a local ADB security audit.</p>
+          </article>
+          <article>
+            <span class="step-number">3</span>
+            <strong>Connect And Allow</strong>
+            <p>Connect by USB, unlock the phone, and authorize the RSA debugging prompt for this computer.</p>
+          </article>
+        </div>
+        <div class="landing-note">
+          DroidSentinel runs locally on Windows. No mobile app is installed, and device changes are recorded in History when actions are applied.
+        </div>
+        <div id="landingStatus" class="landing-status">Checking device readiness...</div>
+      </div>
+    </section>
+
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="mark">DS</div>
+        <div>
+          <h1>DroidSentinel</h1>
+          <p>ADB privacy audit</p>
+        </div>
+      </div>
+      <nav>
+        <button class="nav-item active" data-view="overview">Overview</button>
+        <button class="nav-item" data-view="telemetry">Telemetry</button>
+        <button class="nav-item" data-view="dns">Private DNS</button>
+        <button class="nav-item" data-view="apps">Apps</button>
+        <button class="nav-item" data-view="history">History</button>
+        <button class="nav-item" data-view="settings">Settings</button>
+      </nav>
+      <button id="exitButton" class="exit-button">Exit</button>
+    </aside>
+
+    <main class="shell">
+      <section class="topbar">
+        <div>
+          <p id="viewEyebrow" class="eyebrow">Windows desktop scanner</p>
+          <h2 id="viewTitle">Ad tracking and telemetry audit</h2>
+        </div>
+        <div class="topbar-actions">
+          <button id="exportButton" class="secondary-button">Export report</button>
+          <button id="scanButton" class="primary">Scan device</button>
+        </div>
+      </section>
+
+      <section class="view active" id="view-overview">
+        <section class="status-grid">
+          <article class="panel">
+            <div class="panel-head">
+              <h3>ADB</h3>
+              <span id="adbBadge" class="badge neutral">Checking</span>
+            </div>
+            <p id="adbText" class="muted">Waiting for scan.</p>
+          </article>
+
+          <article class="panel">
+            <div class="panel-head">
+              <h3>Device</h3>
+              <span id="deviceBadge" class="badge neutral">Unknown</span>
+            </div>
+            <div id="deviceText" class="fact-list">
+              <p class="muted">Connect a phone with USB debugging enabled.</p>
+            </div>
+          </article>
+
+          <article class="panel">
+            <div class="panel-head">
+              <h3>Private DNS</h3>
+              <span id="dnsBadge" class="badge neutral">Not scanned</span>
+            </div>
+            <p id="dnsText" class="muted">Private DNS status will appear after scanning.</p>
+          </article>
+        </section>
+
+        <section class="panel findings">
+          <div class="panel-head">
+            <div>
+              <h3>Audit Summary</h3>
+              <p id="scanMeta" class="muted">Run a security audit to summarize packages, telemetry findings, and sensitive access exposure.</p>
+            </div>
+          </div>
+          <div id="auditStats" class="audit-stats"></div>
+          <div id="overviewHighlights" class="empty-state">
+            No audit summary yet.
+          </div>
+        </section>
+        <section id="troubleshootingPanel" class="panel troubleshooting-panel" hidden>
+          <div class="panel-head">
+            <div>
+              <h3>Connection Troubleshooting</h3>
+              <p class="muted">Use this checklist when DroidSentinel cannot audit the device.</p>
+            </div>
+          </div>
+          <div class="tips-list">
+            <p>Unlock the phone and accept the USB debugging prompt.</p>
+            <p>Use a USB data cable, not a charge-only cable.</p>
+            <p>Switch USB mode to File transfer if Windows only sees charging.</p>
+            <p>Install the manufacturer USB driver if Windows does not detect the phone.</p>
+            <p>Disable and re-enable USB debugging to trigger a new authorization prompt.</p>
+          </div>
+        </section>
+      </section>
+
+      <section class="view" id="view-telemetry">
+        <section class="panel findings">
+          <div class="panel-head">
+            <div>
+              <h3>Telemetry Findings</h3>
+              <p class="muted">Known advertising, analytics, OEM telemetry, and vendor service packages detected on the device.</p>
+            </div>
+            <div class="filters" aria-label="Finding filters">
+              <button class="filter active" data-filter="all">All</button>
+              <button class="filter" data-filter="high">High</button>
+              <button class="filter" data-filter="medium">Medium</button>
+              <button class="filter" data-filter="low">Low</button>
+            </div>
+          </div>
+          <div id="actionStatus" class="action-status" role="status" aria-live="polite"></div>
+          <div id="findingsList" class="empty-state">
+            No scan results yet.
+          </div>
+        </section>
+      </section>
+
+      <section class="view" id="view-dns">
+        <section class="panel findings">
+          <div class="panel-head">
+            <div>
+              <h3>Private DNS</h3>
+              <p class="muted">DNS-level filtering and network privacy posture for the connected device.</p>
+            </div>
+            <span id="dnsPageBadge" class="badge neutral">Not scanned</span>
+          </div>
+          <div id="dnsDetails" class="empty-state">
+            Private DNS details will appear after scanning.
+          </div>
+          <div class="dns-actions">
+            <button class="dns-action" data-mode="hostname" data-hostname="dns.adguard-dns.com">Set AdGuard DNS</button>
+            <button class="dns-action" data-mode="hostname" data-hostname="dns.quad9.net">Set Quad9</button>
+            <button class="dns-action" data-mode="hostname" data-hostname="security.cloudflare-dns.com">Set Cloudflare Security</button>
+            <button class="dns-action" data-mode="opportunistic">Set Automatic</button>
+            <button class="dns-action" data-mode="off">Turn Off</button>
+            <button id="revertDnsButton" class="dns-action">Revert to last scan</button>
+          </div>
+          <div class="custom-dns-row">
+            <input id="customDns" class="search-input" type="text" placeholder="Custom hostname, e.g. abc123.dns.nextdns.io" />
+            <button id="customDnsButton" class="secondary-button">Set custom</button>
+          </div>
+          <div id="dnsActionStatus" class="action-status" role="status" aria-live="polite"></div>
+        </section>
+      </section>
+
+      <section class="view" id="view-apps">
+        <section class="panel findings">
+          <div class="panel-head">
+            <div>
+              <h3>App Permission Audit</h3>
+              <p class="muted">User-installed apps ranked by sensitive access exposure. Denied access can be restored from Android app settings.</p>
+            </div>
+            <div class="apps-tools">
+              <input id="appSearch" class="search-input" type="search" placeholder="Search apps or permissions" />
+              <span id="appAuditBadge" class="badge neutral">Not scanned</span>
+            </div>
+          </div>
+          <div id="appActionStatus" class="action-status" role="status" aria-live="polite"></div>
+          <div id="appAuditList" class="empty-state">
+            App permission audit results will appear after scanning.
+          </div>
+        </section>
+
+        <section class="panel findings">
+          <div class="panel-head">
+            <div>
+              <h3>Tracking Access</h3>
+              <p class="muted">High-impact Android access channels that can expose activity, content, or location signals.</p>
+            </div>
+          </div>
+          <div id="signalsList" class="empty-state">
+            No tracking access scan results yet.
+          </div>
+        </section>
+      </section>
+
+      <section class="view" id="view-history">
+        <section class="panel findings">
+          <div class="panel-head">
+            <div>
+              <h3>Action History</h3>
+              <p class="muted">Auditable record of changes applied by DroidSentinel. Restore executes the stored reversal command.</p>
+            </div>
+            <div class="history-tools">
+              <button id="clearHistoryButton" class="secondary-button">Clear history</button>
+              <span id="historyBadge" class="badge neutral">0 actions</span>
+            </div>
+          </div>
+          <div id="historyStatus" class="action-status" role="status" aria-live="polite"></div>
+          <div id="historyList" class="empty-state">
+            No actions recorded yet.
+          </div>
+        </section>
+      </section>
+
+      <section class="view" id="view-settings">
+        <section class="panel findings">
+          <div class="panel-head">
+            <div>
+              <h3>Settings</h3>
+              <p class="muted">Local runtime paths and maintenance actions.</p>
+            </div>
+          </div>
+          <div id="settingsDetails" class="settings-list">Settings will appear after opening this tab.</div>
+          <div class="settings-block">
+            <h3>Telemetry Action Mode</h3>
+            <p class="muted">Choose what the Telemetry page does when applying package actions.</p>
+            <label class="radio-row">
+              <input type="radio" name="packageActionMode" value="disable" checked />
+              Disable package
+            </label>
+            <label class="radio-row">
+              <input type="radio" name="packageActionMode" value="uninstall" />
+              Uninstall for current user
+            </label>
+            <p class="muted">Disable is safer. Uninstall for current user is still usually reversible with install-existing, but OEM behavior can vary.</p>
+          </div>
+          <div class="settings-actions">
+            <button id="settingsRefreshButton" class="secondary-button">Refresh settings</button>
+            <button id="settingsClearHistoryButton" class="secondary-button">Clear history</button>
+          </div>
+        </section>
+      </section>
+    </main>
+
+    <script src="./app.js"></script>
+  </body>
+</html>

@@ -1,0 +1,36 @@
+{
+  "name": "droidsentinel",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Windows desktop GUI for Android privacy, ad tracking, and telemetry checks over ADB.",
+  "main": "src/electron/main.cjs",
+  "scripts": {
+    "start": "electron .",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder --win"
+  },
+  "build": {
+    "appId": "com.droidsentinel.app",
+    "productName": "DroidSentinel",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "src/**/*",
+      "package.json"
+    ],
+    "extraResources": [
+      {
+        "from": "tools/platform-tools",
+        "to": "tools/platform-tools"
+      }
+    ],
+    "win": {
+      "target": "nsis"
+    }
+  },
+  "devDependencies": {
+    "electron": "^33.2.1",
+    "electron-builder": "^26.8.1"
+  }
+}

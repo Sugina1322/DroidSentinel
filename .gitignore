@@ -1,0 +1,17 @@
+node_modules/
+release/
+dist/
+*.log
+npm-debug.log*
+.DS_Store
+Thumbs.db
+
+# Local/generated reports
+DroidSentinel-report-*.json
+DroidSentinel-report-*.html
+
+# Electron builder output/cache
+*.blockmap
+*.exe
+*.dmg
+*.AppImage
